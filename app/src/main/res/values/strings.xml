@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name" translatable="false">Espalet</string>
+    <string name="refresh_cameras">Actualizar cámaras</string>
+</resources>
