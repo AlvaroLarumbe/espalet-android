@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bio.espalet.R;
 import com.bio.espalet.model.SnapshotUrl;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView spainDate;
     private ImageView spainCam;
 
+    private Snapshot franceSnapshot, spainSnapshot;
     private SnapshotFetchUseCase snapshotFetchUseCase;
 
     @Override
@@ -33,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        this.initSnapshots();
         this.initViews();
+        this.setListeners();
     }
 
     @Override
@@ -54,12 +58,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_refresh:
-                this.spainCam.setImageBitmap(null);
+                Toast.makeText(this, R.string.refreshed, Toast.LENGTH_SHORT).show();
                 this.fetchSnapshots(this.snapshotFetchUseCase);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void initSnapshots() {
+        this.franceSnapshot = new Snapshot(HttpUrl.parse(SnapshotUrl.ESPALET_FRANCE));
+        this.spainSnapshot = new Snapshot(HttpUrl.parse(SnapshotUrl.ESPALET_SPAIN));
     }
 
     private void initViews() {
@@ -69,14 +78,19 @@ public class MainActivity extends AppCompatActivity {
         this.spainCam = (ImageView) findViewById(R.id.spain_cam_image);
     }
 
+    private void setListeners() {
+        this.franceCam.setOnClickListener(new SnapshotClickListener(this.franceSnapshot));
+        this.spainCam.setOnClickListener(new SnapshotClickListener(this.spainSnapshot));
+    }
+
     private void fetchSnapshots(SnapshotFetchUseCase useCase) {
         useCase.execute(
-                new Snapshot(HttpUrl.parse(SnapshotUrl.ESPALET_FRANCE)),
+                this.franceSnapshot,
                 new SnapshotFetchCallback(this.franceCam, this.franceDate)
         );
 
         useCase.execute(
-                new Snapshot(HttpUrl.parse(SnapshotUrl.ESPALET_SPAIN)),
+                this.spainSnapshot,
                 new SnapshotFetchCallback(this.spainCam, this.spainDate)
         );
     }

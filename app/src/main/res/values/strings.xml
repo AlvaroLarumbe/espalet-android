@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name" translatable="false">Espalet</string>
     <string name="refresh_cameras">Actualizar cámaras</string>
+    <string name="refreshed">Actualizado</string>
     <string name="france">Francia</string>
     <string name="spain">España</string>
+
+    <string name="error_opening_image">Error al abrir imagen, ¿tienes espacio suficiente?</string>
 </resources>

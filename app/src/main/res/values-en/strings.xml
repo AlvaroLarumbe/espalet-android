@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="refresh_cameras">Refresh cameras</string>
+    <string name="refreshed">Refreshed</string>
     <string name="france">France</string>
     <string name="spain">Spain</string>
+
+    <string name="error_opening_image">Error opening image, do you have enough space?</string>
 </resources>

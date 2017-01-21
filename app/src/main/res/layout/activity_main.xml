@@ -88,7 +88,8 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:gravity="end"
-                android:text="06/01/2017" />
+                android:text="06/01/2017"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
 
