@@ -14,10 +14,14 @@ import com.bio.espalet.model.SnapshotUrl;
 import com.bio.espalet.model.Snapshot;
 import com.bio.espalet.usecase.SnapshotFetchCallback;
 import com.bio.espalet.usecase.SnapshotFetchUseCase;
+import com.bio.espalet.utils.OkHttpRetryInterceptor;
 
 import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 
 public class MainActivity extends AppCompatActivity {
+
+    private OkHttpClient okHttpClient;
 
     private TextView franceDate;
     private ImageView franceCam;
@@ -35,9 +39,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        this.initSnapshots();
-        this.initViews();
-        this.setListeners();
+        this.okHttpClient = this.createOkHttpClient();
+        this.configureSnapshots();
+        this.configureViews();
+        this.configureListeners();
     }
 
     @Override
@@ -66,30 +71,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initSnapshots() {
+    private void configureSnapshots() {
         this.franceSnapshot = new Snapshot(HttpUrl.parse(SnapshotUrl.ESPALET_FRANCE));
         this.spainSnapshot = new Snapshot(HttpUrl.parse(SnapshotUrl.ESPALET_SPAIN));
     }
 
-    private void initViews() {
+    private void configureViews() {
         this.franceDate = (TextView) findViewById(R.id.france_cam_date);
         this.franceCam = (ImageView) findViewById(R.id.france_cam_image);
         this.spainDate = (TextView) findViewById(R.id.spain_cam_date);
         this.spainCam = (ImageView) findViewById(R.id.spain_cam_image);
     }
 
-    private void setListeners() {
+    private void configureListeners() {
         this.franceCam.setOnClickListener(new SnapshotClickListener(this.franceSnapshot));
         this.spainCam.setOnClickListener(new SnapshotClickListener(this.spainSnapshot));
     }
 
+    private OkHttpClient createOkHttpClient() {
+        return new OkHttpClient()
+                .newBuilder()
+                .addInterceptor(new OkHttpRetryInterceptor(this))
+                .build();
+    }
+
     private void fetchSnapshots(SnapshotFetchUseCase useCase) {
         useCase.execute(
+                this.okHttpClient,
                 this.franceSnapshot,
                 new SnapshotFetchCallback(this.franceCam, this.franceDate)
         );
 
         useCase.execute(
+                this.okHttpClient,
                 this.spainSnapshot,
                 new SnapshotFetchCallback(this.spainCam, this.spainDate)
         );

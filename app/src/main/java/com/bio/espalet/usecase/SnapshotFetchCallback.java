@@ -24,4 +24,9 @@ public class SnapshotFetchCallback implements SnapshotFetchTaskPostExecute {
         );
     }
 
+    @Override
+    public void onTaskFailed() {
+        // TODO: display error
+    }
+
 }

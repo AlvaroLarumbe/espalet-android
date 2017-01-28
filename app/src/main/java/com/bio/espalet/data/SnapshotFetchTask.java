@@ -1,6 +1,5 @@
 package com.bio.espalet.data;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
@@ -12,42 +11,64 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class SnapshotFetchTask extends AsyncTask<HttpUrl, Void, Snapshot> {
+public class SnapshotFetchTask extends AsyncTask<Snapshot, Void, Snapshot> {
+
+    private OkHttpClient okHttpClient;
 
     private Snapshot snapshot;
     private SnapshotFetchTaskPostExecute callback;
 
-    public SnapshotFetchTask(Snapshot snapshot, SnapshotFetchTaskPostExecute callback) {
+    public SnapshotFetchTask(
+            OkHttpClient okHttpClient,
+            Snapshot snapshot,
+            SnapshotFetchTaskPostExecute callback
+    ) {
+        this.okHttpClient = okHttpClient;
         this.snapshot = snapshot;
         this.callback = callback;
     }
 
     @Override
-    protected Snapshot doInBackground(HttpUrl... params) {
-        final OkHttpClient okHttpClient = new OkHttpClient();
-
+    protected Snapshot doInBackground(Snapshot... params) {
         Request request = new Request.Builder()
-                .url(params[0])
+                .url(params[0].getUrl())
                 .build();
 
         Response response = null;
-        Bitmap image = null;
 
         try {
-            response = okHttpClient.newCall(request).execute();
-        } catch (IOException e) {
-            // TODO: print error
+            response = this.okHttpClient.newCall(request).execute();
+        } catch (IOException ignored) {}
+
+        if(this.isValidResponse(response)) {
+            snapshot.setImage(BitmapFactory.decodeStream(response.body().byteStream()));
+            snapshot.setDate(this.getServerDate(response));
+
+            return snapshot;
         }
 
-        if(response != null && response.isSuccessful()) {
-            image = BitmapFactory.decodeStream(response.body().byteStream());
-        }
+        return null;
+    }
 
+    @Override
+    protected void onPostExecute(Snapshot snapshot) {
+        if(snapshot != null) {
+            callback.onTaskCompleted(snapshot);
+        }
+        else {
+            callback.onTaskFailed();
+        }
+    }
+
+    private boolean isValidResponse(Response response) {
+        return response != null && response.isSuccessful();
+    }
+
+    private Date getServerDate(Response response) {
         SimpleDateFormat format = new SimpleDateFormat(
                 "EEE, dd MMM yyyy HH:mm:ss 'GMT'",
                 Locale.US
@@ -58,19 +79,9 @@ public class SnapshotFetchTask extends AsyncTask<HttpUrl, Void, Snapshot> {
             if (response != null) {
                 date = format.parse(response.header("Last-Modified"));
             }
-        } catch (ParseException e) {
-            // Could not parse date, current date is already set
-        }
+        } catch (ParseException ignored) {}
 
-        snapshot.setImage(image);
-        snapshot.setDate(date);
-
-        return snapshot;
-    }
-
-    @Override
-    protected void onPostExecute(Snapshot snapshot) {
-        callback.onTaskCompleted(snapshot);
+        return date;
     }
 
 }
