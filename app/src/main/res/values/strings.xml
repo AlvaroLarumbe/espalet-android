@@ -2,7 +2,6 @@
     <string name="app_name" translatable="false">Espalet</string>
     <string name="action_share">Compartir</string>
     <string name="action_refresh_cameras">Actualizar cámaras</string>
-    <string name="refreshed">Actualizando…</string>
     <string name="france">Francia</string>
     <string name="spain">España</string>
 

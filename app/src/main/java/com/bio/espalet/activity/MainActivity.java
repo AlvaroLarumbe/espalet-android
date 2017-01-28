@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bio.espalet.R;
 import com.bio.espalet.model.SnapshotUrl;
@@ -66,7 +66,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_refresh:
-                Toast.makeText(this, R.string.refreshed, Toast.LENGTH_SHORT).show();
+                this.franceCam.setVisibility(View.GONE);
+                this.spainCam.setVisibility(View.GONE);
+                this.franceProgressBar.setVisibility(View.VISIBLE);
+                this.spainProgressBar.setVisibility(View.VISIBLE);
                 this.fetchSnapshots(this.snapshotFetchUseCase);
                 return true;
             default:

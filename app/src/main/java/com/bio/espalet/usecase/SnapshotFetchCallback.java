@@ -23,6 +23,7 @@ public class SnapshotFetchCallback implements SnapshotFetchTaskPostExecute {
     @Override
     public void onTaskCompleted(Snapshot snapshot) {
         this.progressBar.setVisibility(View.GONE);
+        this.image.setVisibility(View.VISIBLE);
         this.image.setImageBitmap(snapshot.getImage());
         this.date.setText(
                 android.text.format.DateFormat.format("HH:mm - dd/MM/yyyy", snapshot.getDate())
