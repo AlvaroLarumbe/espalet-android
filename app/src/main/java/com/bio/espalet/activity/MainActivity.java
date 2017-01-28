@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,8 +26,10 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView franceDate;
     private ImageView franceCam;
+    private ProgressBar franceProgressBar;
     private TextView spainDate;
     private ImageView spainCam;
+    private ProgressBar spainProgressBar;
 
     private Snapshot franceSnapshot, spainSnapshot;
     private SnapshotFetchUseCase snapshotFetchUseCase;
@@ -79,8 +82,10 @@ public class MainActivity extends AppCompatActivity {
     private void configureViews() {
         this.franceDate = (TextView) findViewById(R.id.france_cam_date);
         this.franceCam = (ImageView) findViewById(R.id.france_cam_image);
+        this.franceProgressBar = (ProgressBar) findViewById(R.id.france_progress_bar);
         this.spainDate = (TextView) findViewById(R.id.spain_cam_date);
         this.spainCam = (ImageView) findViewById(R.id.spain_cam_image);
+        this.spainProgressBar = (ProgressBar) findViewById(R.id.spain_progress_bar);
     }
 
     private void configureListeners() {
@@ -99,13 +104,13 @@ public class MainActivity extends AppCompatActivity {
         useCase.execute(
                 this.okHttpClient,
                 this.franceSnapshot,
-                new SnapshotFetchCallback(this.franceCam, this.franceDate)
+                new SnapshotFetchCallback(this.franceCam, this.franceDate, this.franceProgressBar)
         );
 
         useCase.execute(
                 this.okHttpClient,
                 this.spainSnapshot,
-                new SnapshotFetchCallback(this.spainCam, this.spainDate)
+                new SnapshotFetchCallback(this.spainCam, this.spainDate, this.spainProgressBar)
         );
     }
 
