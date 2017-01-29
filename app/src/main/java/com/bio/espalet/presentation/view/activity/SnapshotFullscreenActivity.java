@@ -82,7 +82,10 @@ public class SnapshotFullscreenActivity extends AppCompatActivity {
         });
 
         ImageView cam = (ImageView) mContentView;
-        cam.setImageBitmap(this.fetchBitmap(SnapshotConstants.SNAPSHOT_FILENAME));
+        cam.setImageBitmap(
+                this.fetchBitmap(SnapshotConstants.SNAPSHOT_FOLDER + File.separator +
+                        SnapshotConstants.SNAPSHOT_FILENAME)
+        );
         new PhotoViewAttacher(cam);
     }
 
