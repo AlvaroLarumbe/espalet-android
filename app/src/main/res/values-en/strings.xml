@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_share">Share</string>
     <string name="action_refresh_cameras">Refresh cameras</string>
     <string name="france">France</string>
     <string name="spain">Spain</string>
-
-    <string name="error_opening_image">Error opening image, do you have enough space?</string>
+    <string name="image_error">Image error, do you have enough space?</string>
+    <string name="action_share">Share</string>
+    <string name="share_wait">Please, wait until images are loaded</string>
 </resources>

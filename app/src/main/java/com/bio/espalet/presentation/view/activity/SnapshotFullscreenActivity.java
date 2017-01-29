@@ -1,4 +1,4 @@
-package com.bio.espalet.activity;
+package com.bio.espalet.presentation.view.activity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bio.espalet.R;
+import com.bio.espalet.model.SnapshotConstants;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,7 +82,7 @@ public class SnapshotFullscreenActivity extends AppCompatActivity {
         });
 
         ImageView cam = (ImageView) mContentView;
-        cam.setImageBitmap(this.fetchBitmap("snapshot.tmp"));
+        cam.setImageBitmap(this.fetchBitmap(SnapshotConstants.SNAPSHOT_FILENAME));
         new PhotoViewAttacher(cam);
     }
 
@@ -95,7 +96,7 @@ public class SnapshotFullscreenActivity extends AppCompatActivity {
         try {
             in = new FileInputStream(new File(getCacheDir(), fileName));
         } catch (FileNotFoundException e) {
-            Toast.makeText(this, R.string.error_opening_image, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.image_error, Toast.LENGTH_SHORT).show();
         }
 
         return in;

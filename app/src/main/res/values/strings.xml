@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name" translatable="false">Espalet</string>
-    <string name="action_share">Compartir</string>
     <string name="action_refresh_cameras">Actualizar cámaras</string>
     <string name="france">Francia</string>
     <string name="spain">España</string>
-
-    <string name="error_opening_image">Error al abrir imagen, ¿tienes espacio suficiente?</string>
+    <string name="image_error">Error de imagen, ¿tienes espacio suficiente?</string>
+    <string name="action_share">Compartir</string>
+    <string name="share_wait">Please, wait until images are loaded</string>
 </resources>
